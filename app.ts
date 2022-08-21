@@ -3,10 +3,17 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const http = require('http');
 const OpenApiValidator = require('express-openapi-validator');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+
 
 const port = 3000;
 const app = express();
 const apiSpec = path.join(__dirname, 'api.yaml');
+const swaggerDocument = YAML.load(apiSpec);
+var options = {
+    customCss: '.swagger-ui .topbar { display: none }'
+  };
 
 // 1. Install bodyParsers for the request types your API will support
 app.use(express.urlencoded({ extended: false }));
@@ -14,7 +21,7 @@ app.use(express.text());
 app.use(express.json());
 
 app.use('/spec', express.static(apiSpec));
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument,options));
 // 2. Add the OpenApiValidator middleware
 app.use(
   OpenApiValidator.middleware({
