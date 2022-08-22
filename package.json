@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build":"npm run prepare && npx caxa --input . --output monerochan-merchant-rpc -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/dist/app.js\"",
+    "build":"npm run prepare && npx caxa -e monerochan-merchant-rpc .git --input . --output monerochan-merchant-rpc -- \"{{caxa}}/node_modules/.bin/node\" \"{{caxa}}/dist/app.js\"",
     "dev": "tsnd --respawn app.ts",
     "prepare": "tsc && cp ./api.yaml ./dist/api.yaml",
     "test": "echo \"Error: no test specified\" && exit 1"
