@@ -6,6 +6,29 @@ info:
 servers:
   - url: /v1
 paths:
+  /wallet/create:
+    post:
+      description:
+        test
+      summary: Subscribe to a webhook
+      operationId: create
+      x-eov-operation-handler: routes/wallet/create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletCreate'
+            examples:
+              Testnet:
+                value:
+                  networkType: testnet
+              Stagenet:
+                value:
+                  networkType: stagenet
+      responses:
+        '201':
+          description: Webhook created
   /ping:
     get:
       description: 
@@ -20,3 +43,15 @@ paths:
               schema:
                 type: string
                 example: pong
+components:
+  schemas:
+    WalletCreate:
+      type: object
+      properties:
+        networkType:
+          type: string
+          enum: 
+            - stagenet
+            - mainnet
+            - testnet
+          default: mainnet
