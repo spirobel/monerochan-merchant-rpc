@@ -7,7 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 
 
-const port = 3000;
+const port = 3001;
 const app = express();
 const apiSpec = path.join(__dirname, 'api.yaml');
 const swaggerDocument = YAML.load(apiSpec);
