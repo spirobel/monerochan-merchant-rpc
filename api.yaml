@@ -8,9 +8,10 @@ servers:
 paths:
   /wallet/initialize:
     post:
-      description:
-        test
-      summary: Subscribe to a webhook
+      description: |
+        call this endpoint to create the wallet file from primary address and viewkey. \
+        This is the first endpoint you need to call. Afterwards you can call the /wallet/sync endpoint. 
+      summary: create the wallet file from primary address and viewkey
       operationId: initialize
       x-eov-operation-handler: routes/wallet/initialize 
       tags:
@@ -22,16 +23,23 @@ paths:
             schema:
               $ref: '#/components/schemas/WalletInitialize'
             examples:
+              Testnet:
+                value:
+                  path: ./monerochans_testnet_stash
+                  networkType: stagenet
+                  primaryAddress: 9uJ5JRXP3BQAGW1nHK9KzVHUifBfCAHnJKRnZ45ebYcQJrt2wprNgYoGWJvPrCW6nSiBAzmeSAGBGjM5kt2mRb3g98JJetV
+                  privateViewKey: d99cca1f6794a0a856cde057421702482b8d56e36f31a939239f97e9f5a32b0d
+                  restoreHeight: 0
               Stagenet:
                 value:
-                  path: ./monerochans_stash
+                  path: ./monerochans_stagenet_stash
                   networkType: stagenet
                   primaryAddress: 55Py9fSwyEeQX1CydtFfPk96uHEFxSxvD9AYBy7dwnYt9cXqKDjix9rS9AWZ5GnH4B1Z7yHr3B2UH2updNw5ZNJEEnv87H1
                   privateViewKey: 1195868d30373aa9d92c1a21514de97670bcd360c209a409ea3234174892770e
                   restoreHeight: 957038
       responses:
         '200':
-          description: Webhook created
+          description: success
   /ping:
     get:
       description: 
