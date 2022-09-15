@@ -40,6 +40,8 @@ paths:
       responses:
         '200':
           description: success
+        '500':
+          description: unexpected error
   /ping:
     get:
       description: 
