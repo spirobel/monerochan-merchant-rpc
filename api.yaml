@@ -26,7 +26,7 @@ paths:
               Testnet:
                 value:
                   path: ./monerochans_testnet_stash
-                  networkType: stagenet
+                  networkType: testnet
                   primaryAddress: 9uJ5JRXP3BQAGW1nHK9KzVHUifBfCAHnJKRnZ45ebYcQJrt2wprNgYoGWJvPrCW6nSiBAzmeSAGBGjM5kt2mRb3g98JJetV
                   privateViewKey: d99cca1f6794a0a856cde057421702482b8d56e36f31a939239f97e9f5a32b0d
                   restoreHeight: 0
@@ -40,6 +40,10 @@ paths:
       responses:
         '200':
           description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
         '500':
           description: unexpected error
   /ping:
@@ -81,6 +85,12 @@ components:
         - primaryAddress
         - privateViewKey
         - restoreHeight
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      
 tags:
   - name: startup tasks
     description: initialize & reopen & sync
