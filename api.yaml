@@ -6,28 +6,31 @@ info:
 servers:
   - url: /v1
 paths:
-  /wallet/create:
+  /wallet/initialize:
     post:
       description:
         test
       summary: Subscribe to a webhook
-      operationId: create
-      x-eov-operation-handler: routes/wallet/create
+      operationId: initialize
+      x-eov-operation-handler: routes/wallet/initialize 
+      tags:
+       - startup tasks
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/WalletCreate'
+              $ref: '#/components/schemas/WalletInitialize'
             examples:
-              Testnet:
-                value:
-                  networkType: testnet
               Stagenet:
                 value:
+                  path: ./monerochans_stash
                   networkType: stagenet
+                  primaryAddress: 55Py9fSwyEeQX1CydtFfPk96uHEFxSxvD9AYBy7dwnYt9cXqKDjix9rS9AWZ5GnH4B1Z7yHr3B2UH2updNw5ZNJEEnv87H1
+                  privateViewKey: 1195868d30373aa9d92c1a21514de97670bcd360c209a409ea3234174892770e
+                  restoreHeight: 957038
       responses:
-        '201':
+        '200':
           description: Webhook created
   /ping:
     get:
@@ -45,9 +48,11 @@ paths:
                 example: pong
 components:
   schemas:
-    WalletCreate:
+    WalletInitialize:
       type: object
       properties:
+        path:
+          type: string
         networkType:
           type: string
           enum: 
@@ -55,3 +60,18 @@ components:
             - mainnet
             - testnet
           default: mainnet
+        primaryAddress:
+          type: string
+        privateViewKey:
+          type: string
+        restoreHeight:
+          type: integer
+      required:
+        - path
+        - primaryAddress
+        - privateViewKey
+        - restoreHeight
+tags:
+  - name: startup tasks
+    description: initialize & reopen & sync
+  - name: accept payments
