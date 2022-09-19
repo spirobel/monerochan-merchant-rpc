@@ -85,20 +85,24 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
         '500':
           description: unexpected error
-  /ping:
+  /wallets/status:
     get:
-      description: 
-        ping then pong!
-      operationId: ping
-      x-eov-operation-handler: routes/ping
+      description: |
+        call this endpoint to get the syncing status of the currently opened wallets. \
+        this endpoint can also be used check general api health (if the monerochan merchant api is still running).
+      operationId: status
+      x-eov-operation-handler: routes/wallets/status
+      tags:
+       - accept payments & check api health
       responses:
         '200':
-          description: OK
+          description: success
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: pong
+                $ref: '#/components/schemas/WalletStatusResponse'
+        '500':
+          description: unexpected error
 components:
   schemas:
     WalletInitialize:
@@ -146,6 +150,21 @@ components:
       properties:
         message:
           type: string
+    WalletStatusResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          path:
+            type: string
+          status:
+            type: string
+            enum:
+              - synching
+              - not synching
+        required:
+          - status
+          - path
       
 tags:
   - name: startup tasks
