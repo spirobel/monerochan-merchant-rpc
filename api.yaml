@@ -46,6 +46,45 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
         '500':
           description: unexpected error
+  /wallet/sync:
+    post:
+      description: |
+        call this endpoint to start syncing the wallet after the wallet file was created. \
+        This is the second endpoint you need to call after creating the wallet file with /wallet/initialize. \
+        Afterwards you can call the accept payments & check api health endpoints. Or shut things down orderly with the shutdown tasks.
+      summary: start syncing the wallet after the wallet file was created.
+      operationId: sync
+      x-eov-operation-handler: routes/wallet/sync 
+      tags:
+       - startup tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletSync'
+            examples:
+              Testnet:
+                value:
+                  path: ./monerochans_testnet_stash
+                  networkType: testnet
+                  serverUri: http://localhost:28081
+
+              Stagenet:
+                value:
+                  path: ./monerochans_stagenet_stash
+                  networkType: stagenet
+                  serverUri: http://stagenet.xmr-tw.org:38081
+
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '500':
+          description: unexpected error
   /ping:
     get:
       description: 
@@ -85,6 +124,23 @@ components:
         - primaryAddress
         - privateViewKey
         - restoreHeight
+    WalletSync:
+      type: object
+      properties:
+        path:
+          type: string
+        networkType:
+          type: string
+          enum: 
+            - stagenet
+            - mainnet
+            - testnet
+          default: mainnet
+        serverUri:
+          type: string
+      required:
+        - path
+        - serverUri
     SuccessResponse:
       type: object
       properties:
@@ -94,4 +150,5 @@ components:
 tags:
   - name: startup tasks
     description: initialize & reopen & sync
-  - name: accept payments
+  - name: accept payments & check api health
+  - name: shutdown tasks 
