@@ -2,7 +2,7 @@ openapi: '3.0.0'
 info:
   version: 1.0.0
   title: Monerochan Merchant RPC
-  description: An API to easily accept payments in Monero. Accept digital cash in 3 simple steps. Take a look at the api endpoints (1),(2) and (3) first!
+  description: An API to easily accept payments in Monero. Accept digital cash in 3 simple steps. Take a look at the endpoints (1),(2) and (3) first!
 servers:
   - url: /v1
 paths:
