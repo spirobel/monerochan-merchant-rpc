@@ -2,7 +2,7 @@ openapi: '3.0.0'
 info:
   version: 1.0.0
   title: Monerochan Merchant RPC
-  description: An API to easily accept payments in Monero
+  description: An API to easily accept payments in Monero. Accept digital cash in 3 simple steps. Take a look at the api endpoints (1),(2) and (3) first!
 servers:
   - url: /v1
 paths:
@@ -11,7 +11,7 @@ paths:
       description: |
         Call this endpoint to create the wallet file from primary address and viewkey. \
         This is the first endpoint you need to call. Afterwards you can call the /wallet/sync endpoint. 
-      summary: create the wallet file from primary address and viewkey
+      summary: create the wallet file from primary address and viewkey (1)
       operationId: initialize
       x-eov-operation-handler: routes/wallet/initialize 
       tags:
@@ -55,7 +55,7 @@ paths:
         \
         The monerochan merchant API will supply incoming payments as a JSON object to the url you provided in the callback variable. \
         Please make sure to attach a long random generated string to the callback, so that your application stays secure and users cant guess where the callback is located.
-      summary: start syncing the wallet after the wallet file was created.
+      summary: start syncing the wallet after the wallet file was created (2)
       operationId: sync
       x-eov-operation-handler: routes/wallet/sync 
       tags:
@@ -100,7 +100,7 @@ paths:
         You can also use this endpoint to query just the exchange rate or just get an address. \
         It is all combined in this endpoint because these RPC calls are expensive and you will most likely need all of these things at once. The default currency is USD. Check out other supported currencies here: <a href="https://api.coingecko.com/api/v3/simple/supported_vs_currencies">https://api.coingecko.com/api/v3/simple/supported_vs_currencies</a>
         
-      summary: get a unique address per client and product & the xmr exchange rate 
+      summary: get a unique address per client and product & the xmr exchange rate (3)
       operationId: invoice
       x-eov-operation-handler: routes/wallets/invoice
       tags:
