@@ -103,6 +103,34 @@ paths:
                 $ref: '#/components/schemas/WalletStatusResponse'
         '500':
           description: unexpected error
+  /wallets/shutdown:
+    post:
+      description: |
+        stop syncing and close wallets. \
+        just send the paths of the wallets you want to close as an array. 
+      operationId: shutdown
+      x-eov-operation-handler: routes/wallets/shutdown
+      tags:
+       - shutdown tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalletShutdown'
+            examples:
+              Shutdown Testnet and Stagenet :
+                value:
+                  - ./monerochans_testnet_stash
+                  - ./monerochans_stagenet_stash
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '500':
+          description: unexpected error
 components:
   schemas:
     WalletInitialize:
@@ -150,6 +178,10 @@ components:
       properties:
         message:
           type: string
+    WalletShutdown:
+      type: array
+      items:
+        type: string
     WalletStatusResponse:
       type: array
       items:
