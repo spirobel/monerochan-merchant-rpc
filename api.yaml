@@ -9,7 +9,7 @@ paths:
   /wallet/initialize:
     post:
       description: |
-        call this endpoint to create the wallet file from primary address and viewkey. \
+        Call this endpoint to create the wallet file from primary address and viewkey. \
         This is the first endpoint you need to call. Afterwards you can call the /wallet/sync endpoint. 
       summary: create the wallet file from primary address and viewkey
       operationId: initialize
@@ -49,9 +49,12 @@ paths:
   /wallet/sync:
     post:
       description: |
-        call this endpoint to start syncing the wallet after the wallet file was created. \
+        Call this endpoint to start syncing the wallet after the wallet file was created. \
         This is the second endpoint you need to call after creating the wallet file with /wallet/initialize. \
-        Afterwards you can call the accept payments & check api health endpoints. Or shut things down orderly with the shutdown tasks.
+        Afterwards you can call the accept payments & check api health endpoints. Or shut things down orderly with the shutdown tasks. \
+        \
+        The monerochan merchant API will supply incoming payments as a JSON object to the url you provided in the callback variable. \
+        Please make sure to attach a long random generated string to the callback, so that your application stays secure and users cant guess where the callback is located.
       summary: start syncing the wallet after the wallet file was created.
       operationId: sync
       x-eov-operation-handler: routes/wallet/sync 
@@ -69,12 +72,15 @@ paths:
                   path: ./monerochans_testnet_stash
                   networkType: testnet
                   serverUri: http://localhost:28081
+                  callback: http://monerochans_snickerstore.com/received/money/callback_wlhertno2l3SECRET_RANDOM_STRING
 
               Stagenet:
                 value:
                   path: ./monerochans_stagenet_stash
                   networkType: stagenet
                   serverUri: http://stagenet.xmr-tw.org:38081
+                  callback: http://monerochans_snickerstore.com/received/money/callback_wlhertno2l3SECRET_RANDOM_STRING
+
 
       responses:
         '200':
@@ -88,10 +94,10 @@ paths:
   /make/invoice:
     post:
       description: |
-        supply the path of the wallet where you want to receive the money. \
-        as the payment_id you can use the autoincremented_id of a payment_request SQL table for example. \
-        make sure this payment_id is unique per product and client so that you know which payment is for which product or service and which client it came from. \
-        you can also use this endpoint to query just the exchange rate or just get an address. \
+        Supply the path of the wallet where you want to receive the money. \
+        As the payment_id you can use the autoincremented_id of a payment_request SQL table for example. \
+        Make sure this payment_id is unique per product and client so that you know which payment is for which product or service and which client it came from. \
+        You can also use this endpoint to query just the exchange rate or just get an address. \
         It is all combined in this endpoint because these RPC calls are expensive and you will most likely need all of these things at once. The default currency is USD. Check out other supported currencies here: <a href="https://api.coingecko.com/api/v3/simple/supported_vs_currencies">https://api.coingecko.com/api/v3/simple/supported_vs_currencies</a>
         
       summary: get a unique address per client and product & the xmr exchange rate 
@@ -141,8 +147,8 @@ paths:
   /wallets/status:
     get:
       description: |
-        call this endpoint to get the syncing status of the currently opened wallets. \
-        this endpoint can also be used check general api health (if the monerochan merchant api is still running).
+        Call this endpoint to get the syncing status of the currently opened wallets. \
+        This endpoint can also be used check general api health (if the monerochan merchant api is still running).
       summary: check sync status on individual wallets and general api health
       operationId: status
       x-eov-operation-handler: routes/wallets/status
@@ -160,8 +166,8 @@ paths:
   /wallets/shutdown:
     post:
       description: |
-        stop syncing and close wallets. \
-        just send the paths of the wallets you want to close as an array. 
+        Stop syncing and close wallets. \
+        Just send the paths of the wallets you want to close as an array. 
       summary: stop syncing and close individual wallets
       operationId: shutdown
       x-eov-operation-handler: routes/wallets/shutdown
@@ -225,9 +231,12 @@ components:
           default: mainnet
         serverUri:
           type: string
+        callback:
+          type: string
       required:
         - path
         - serverUri
+        - callback
     MakeInvoice:
       type: object
       properties:
