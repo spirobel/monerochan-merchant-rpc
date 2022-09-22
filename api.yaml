@@ -192,6 +192,28 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
         '500':
           description: unexpected error
+  /callback/console_log:
+    post:
+      description: |
+        Convenience endpoint to test the sync callback. It will echo the received transactions to the console. \
+        The fields: address, payment_id and amount should suffice for most usecases.
+      summary: use this to test the sync endpoint
+      operationId: testcallback
+      x-eov-operation-handler: routes/wallets/testcallback
+      tags:
+       - testing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncCallbackExample'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
 components:
   schemas:
     WalletInitialize:
@@ -282,9 +304,25 @@ components:
         required:
           - status
           - path
+    SyncCallbackExample:
+      type: object
+      properties:
+        address: 
+          type: string
+        payment_id:
+          type: string
+        amount:
+          type: integer
+        tx_hash:
+          type: string
+        height:
+          type: integer
+        confirmations:
+          type: integer
       
 tags:
   - name: startup tasks
     description: initialize & reopen & sync
   - name: accept payments & check api health
   - name: shutdown tasks 
+  - name: testing
