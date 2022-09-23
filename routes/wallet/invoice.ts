@@ -2,9 +2,8 @@ module.exports = {
   invoice: async (req:any, res:any) =>  {
     const QRCode = require('qrcode')
 
-      const monerojs = require("monero-javascript");
-      let wallet = req.app.locals.wallets[req.body.path]
       try{
+        let wallet = req.app.locals.wallets[req.body.path]
         let address = ""
         let address_qrcode = ""
         if(req.body.payment_id){
