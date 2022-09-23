@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "express": "^4.18.1",
     "express-openapi-validator": "^4.13.8",
     "monero-javascript": "^0.7.4",
