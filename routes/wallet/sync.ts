@@ -39,13 +39,14 @@ module.exports = {
           {
             path: req.body.path,
             networkType: req.body.networkType,
+            serverUri: req.body.serverUri,
             password: "password_is_snakeoil_in_this_case",
           }
         );
         if(!req.app.locals.wallets){req.app.locals.wallets = {}}
         req.app.locals.wallets[req.body.path] = wallet
-        wallet.addListener( new WalletListener(wallet))
-        wallet.startSyncing(5000)
+        await wallet.addListener( new WalletListener(wallet))
+        await wallet.startSyncing(5000)
         res.status(200).json({message: 'wallet successfully opened and sync started.'})
       } catch (error){
         res.status(500).json({ message:'unexpected error: ' + error });
