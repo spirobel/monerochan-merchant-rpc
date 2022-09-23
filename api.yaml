@@ -296,13 +296,11 @@ components:
         properties:
           path:
             type: string
-          status:
-            type: string
-            enum:
-              - synching
-              - not synching
+          current_sync_height:
+            type: integer
+          daemon_sync_height:
+            type: integer
         required:
-          - status
           - path
     SyncCallbackExample:
       type: object
