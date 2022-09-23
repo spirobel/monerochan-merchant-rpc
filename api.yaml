@@ -115,24 +115,24 @@ paths:
               Testnet:
                 value:
                   path: ./monerochans_testnet_stash
-                  payment_id: 03284e41c342f036
+                  payment_id: 888
                   amount: 10
 
               Stagenet:
                 value:
                   path: ./monerochans_stagenet_stash
-                  payment_id: 03284e41c342f036
+                  payment_id: 888
                   amount: 10
               Testnet Amount in BTC:
                 value:
                   path: ./monerochans_testnet_stash
-                  payment_id: 03284e41c342f036
+                  payment_id: 888
                   amount: 10
                   currency: btc
               Testnet Amount in EURO:
                 value:
                   path: ./monerochans_testnet_stash
-                  payment_id: 03284e41c342f036
+                  payment_id: 888
                   amount: 10
                   currency: eur
       responses:
@@ -265,7 +265,7 @@ components:
         path:
           type: string
         payment_id:
-          type: string
+          type: integer
         amount: 
           type: integer
         currency:
