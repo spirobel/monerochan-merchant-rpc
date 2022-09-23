@@ -102,7 +102,7 @@ paths:
         
       summary: get a unique address per client and product & the xmr exchange rate (3)
       operationId: invoice
-      x-eov-operation-handler: routes/wallets/invoice
+      x-eov-operation-handler: routes/wallet/invoice
       tags:
        - accept payments & check api health
       requestBody:
@@ -151,7 +151,7 @@ paths:
         This endpoint can also be used check general api health (if the monerochan merchant api is still running).
       summary: check sync status on individual wallets and general api health
       operationId: status
-      x-eov-operation-handler: routes/wallets/status
+      x-eov-operation-handler: routes/wallet/status
       tags:
        - accept payments & check api health
       responses:
@@ -170,7 +170,7 @@ paths:
         Just send the paths of the wallets you want to close as an array. 
       summary: stop syncing and close individual wallets
       operationId: shutdown
-      x-eov-operation-handler: routes/wallets/shutdown
+      x-eov-operation-handler: routes/wallet/shutdown
       tags:
        - shutdown tasks
       requestBody:
@@ -199,7 +199,7 @@ paths:
         The fields: address, payment_id and amount should suffice for most usecases.
       summary: use this to test the sync endpoint
       operationId: testcallback
-      x-eov-operation-handler: routes/wallets/testcallback
+      x-eov-operation-handler: routes/wallet/testcallback
       tags:
        - testing
       requestBody:
