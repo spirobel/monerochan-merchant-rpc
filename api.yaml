@@ -305,8 +305,6 @@ components:
     SyncCallbackExample:
       type: object
       properties:
-        address: 
-          type: string
         payment_id:
           type: string
         amount:
