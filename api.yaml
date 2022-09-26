@@ -81,7 +81,13 @@ paths:
                   serverUri: http://stagenet.xmr-tw.org:38081
                   callback: http://monerochans_snickerstore.com/received/money/callback_wlhertno2l3SECRET_RANDOM_STRING
 
-
+              Testnet with Testcallback:
+                value:
+                  path: ./monerochans_testnet_stash
+                  networkType: testnet
+                  serverUri: http://localhost:28081
+                  callback: http://localhost:3001/callback/console_log
+           
       responses:
         '200':
           description: success
@@ -315,6 +321,8 @@ components:
           type: integer
         confirmations:
           type: integer
+        isConfirmed:
+          type: boolean
       
 tags:
   - name: startup tasks
