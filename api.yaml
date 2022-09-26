@@ -308,7 +308,7 @@ components:
         payment_id:
           type: string
         amount:
-          type: integer
+          type: string
         tx_hash:
           type: string
         height:
