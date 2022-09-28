@@ -104,7 +104,11 @@ paths:
         As the payment_id you can use the autoincremented_id of a payment_request SQL table for example. \
         Make sure this payment_id is unique per product and client so that you know which payment is for which product or service and which client it came from. \
         You can also use this endpoint to query just the exchange rate or just get an address. \
-        It is all combined in this endpoint because these RPC calls are expensive and you will most likely need all of these things at once. The default currency is USD. Check out other supported currencies here: <a href="https://api.coingecko.com/api/v3/simple/supported_vs_currencies">https://api.coingecko.com/api/v3/simple/supported_vs_currencies</a>
+        It is all combined in this endpoint because these RPC calls are expensive and you will most likely need all of these things at once. The default currency is USD. Check out other supported currencies here: <a href="https://api.coingecko.com/api/v3/simple/supported_vs_currencies">https://api.coingecko.com/api/v3/simple/supported_vs_currencies</a> \
+        It might seem odd that the amount is a double, but that is what the coingecko api returns as well. \
+        The response amount will contain a String with a big number. This number should have a dot inserted at the place where the dot would be if it was a double that got devided by 1000000000000 \
+        The trailing zeros should also be removed before presenting it to the user. The number should be saved without the dot as is so it can later be easily compared with the string that gets returned by the sync callback. \
+        This api will take care of these things for you. Show the display_amount to the user and store the amount variable that gets returned by this endpoint.
         
       summary: get a unique address per client and product & the xmr exchange rate (3)
       operationId: invoice
@@ -273,7 +277,7 @@ components:
         payment_id:
           type: integer
         amount: 
-          type: integer
+          type: number
         currency:
           type: string
           default: usd
@@ -285,7 +289,9 @@ components:
         address_qrcode:
           type: string
         amount:
-          type: integer
+          type: string
+        display_amount:
+          type: string
     SuccessResponse:
       type: object
       properties:
