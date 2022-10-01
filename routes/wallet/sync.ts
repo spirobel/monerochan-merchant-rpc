@@ -1,35 +1,51 @@
 
-const monerojs = require("monero-javascript");
-
-class WalletListener extends require("monero-javascript").MoneroWalletListener {
-  constructor(wallet:any, callback: string ) {
-    super();
-    this.callback = callback
-    this.wallet = wallet
-}
- 
-  onOutputReceived(output:any) {
-      let tx_hash = output.getTx().getHash();
-      //https://github.com/monero-ecosystem/monero-javascript/issues/60
-      this.wallet.getTx(tx_hash).then((tx:any) => {
-        
-          let payment_id = tx.getPaymentId()
-          let amount = Object.assign(new monerojs.BigInteger(), tx.getIncomingAmount()).toString()
-          let height = tx.getHeight()
-          let confirmations = tx.getNumConfirmations()
-          let isConfirmed = tx.isConfirmed()
-          axios.post(this.callback, { payment_id, amount, tx_hash, height, confirmations, isConfirmed })          
-      });
-  }
-}
-
-
-
-
-
-
 module.exports = {
   sync: async (req:any, res:any) =>  {
+    const axios = require('axios').default;
+    const monerojs = require("monero-javascript");
+    const MoneroWalletListener = monerojs.MoneroWalletListener;
+
+    class WalletListener extends MoneroWalletListener {
+      constructor(wallet:any, callback: string ) {
+        super();
+        this.callback = callback
+        this.wallet = wallet
+       }
+
+      async onNewBlock(height:number) { //on every new block we send the updated info
+        let return_array: any[] = []    // on the transactions of the last 10 blocks to the callback url
+
+        let wallet = this.wallet
+        let minHeight = height - 10
+        if(minHeight < 0){ minHeight = 0}
+        let maxHeight = height
+        try{
+        let transactions = await wallet.getTxs({
+          minHeight, maxHeight
+        })
+
+          for (let transaction of transactions) {
+            return_array.push({
+              payment_id: Number("0x" + transaction.getPaymentId()),
+              amount: Object.assign(new monerojs.BigInteger(), transaction.getIncomingAmount()).toString(),
+              height: transaction.getHeight(),
+              confirmations: transaction.getNumConfirmations(),
+              isConfirmed: transaction.isConfirmed()
+            })
+        }
+        if(return_array.length > 0 ){
+          await axios.post(this.callback, return_array,  {
+          headers: {
+              'accept': 'application/json',
+              'Content-Type': 'application/json'
+          }
+        }) }         
+     }catch (error) {
+      console.log("error in the new block listener with callback:",this.callback, "error message: ", error)
+    }
+
+    }
+    } //END of Walletlistener definition 
 
       try{
         let wallet = await monerojs.openWalletFull(
