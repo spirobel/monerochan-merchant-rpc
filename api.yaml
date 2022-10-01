@@ -86,7 +86,7 @@ paths:
                   path: ./monerochans_testnet_stash
                   networkType: testnet
                   serverUri: http://localhost:28081
-                  callback: http://localhost:3001/callback/console_log
+                  callback: http://localhost:3001/v1/callback/console_log
            
       responses:
         '200':
@@ -173,6 +173,36 @@ paths:
                 $ref: '#/components/schemas/WalletStatusResponse'
         '500':
           description: unexpected error
+  /wallets/getTransactions:
+    post:
+      description: |
+        Use this endpoint to get transactions of a wallet. You can supply max and min height (tx height <= and >=) to limit the scope a bit. \
+        Also supply the path of the wallet that you want to query.
+      summary: use this endpoint to get transactions of a wallet.
+      operationId: getTransactions
+      x-eov-operation-handler: routes/wallet/getTransactions
+      tags:
+       - accept payments & check api health
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetTransactions'
+            examples:
+              Testnet Transaction from 0 to  10000:
+                value:
+                  path: ./monerochans_testnet_stash
+                  minHeight: 0
+                  maxHeight: 10000
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionsResponse'
+        '500':
+          description: unexpected error
   /wallets/shutdown:
     post:
       description: |
@@ -216,7 +246,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SyncCallbackExample'
+              $ref: '#/components/schemas/TransactionsResponse'
       responses:
         '200':
           description: success
@@ -314,21 +344,35 @@ components:
             type: integer
         required:
           - path
-    SyncCallbackExample:
+    GetTransactions:
       type: object
       properties:
-        payment_id:
+        path:
           type: string
-        amount:
-          type: string
-        tx_hash:
-          type: string
-        height:
-          type: integer
-        confirmations:
-          type: integer
-        isConfirmed:
-          type: boolean
+        minHeight:
+          type: number
+        maxHeight:
+          type: number
+      required:
+        - path
+    TransactionsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          payment_id:
+            type: integer
+            nullable: true
+          amount:
+            type: string
+          tx_hash:
+            type: string
+          height:
+            type: integer
+          confirmations:
+            type: integer
+          isConfirmed:
+            type: boolean
       
 tags:
   - name: startup tasks
