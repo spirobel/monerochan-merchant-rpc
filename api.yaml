@@ -54,6 +54,8 @@ paths:
         Afterwards you can call the accept payments & check api health endpoints. Or shut things down orderly with the shutdown tasks. \
         \
         The monerochan merchant API will supply incoming payments as a JSON object to the url you provided in the callback variable. \
+        On every new block that is received during syncing it will supply the transactions received during the last 10 blocks. \
+        This way you can keep the user up to date with the numbers of confirmations as they happen (and the is_confirmed status of the transactions). \
         Please make sure to attach a long random generated string to the callback, so that your application stays secure and users cant guess where the callback is located.
       summary: start syncing the wallet after the wallet file was created (2)
       operationId: sync
