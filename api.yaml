@@ -295,6 +295,9 @@ components:
           type: string
         callback:
           type: string
+        include_transactions_without_payment_id:
+          type: boolean
+          default: false
       required:
         - path
         - serverUri
@@ -353,6 +356,9 @@ components:
           type: number
         maxHeight:
           type: number
+        include_transactions_without_payment_id:
+          type: boolean
+          default: false
       required:
         - path
     TransactionsResponse:

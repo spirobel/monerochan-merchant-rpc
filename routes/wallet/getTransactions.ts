@@ -13,13 +13,17 @@ module.exports = {
         })
 
           for (let transaction of transactions) {
-            return_array.push({
-              payment_id: Number("0x" + transaction.getPaymentId()) || null,
-              amount: Object.assign(new monerojs.BigInteger(), transaction.getIncomingAmount()).toString(),
-              height: transaction.getHeight(),
-              confirmations: transaction.getNumConfirmations(),
-              isConfirmed: transaction.isConfirmed()
-            })
+            let payment_id = Number("0x" + transaction.getPaymentId()) || null
+            if(payment_id != null || req.body.include_transactions_without_payment_id){
+              return_array.push({
+                payment_id,
+                amount: Object.assign(new monerojs.BigInteger(), transaction.getIncomingAmount()).toString(),
+                height: transaction.getHeight(),
+                confirmations: transaction.getNumConfirmations(),
+                isConfirmed: transaction.isConfirmed()
+              })
+            }
+
         }
   
         res.status(200).json(return_array)

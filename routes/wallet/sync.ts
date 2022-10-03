@@ -25,13 +25,16 @@ module.exports = {
         })
 
           for (let transaction of transactions) {
+            let payment_id = Number("0x" + transaction.getPaymentId()) || null
+            if(payment_id != null || req.body.include_transactions_without_payment_id){
             return_array.push({
-              payment_id: Number("0x" + transaction.getPaymentId()),
+              payment_id,
               amount: Object.assign(new monerojs.BigInteger(), transaction.getIncomingAmount()).toString(),
               height: transaction.getHeight(),
               confirmations: transaction.getNumConfirmations(),
               isConfirmed: transaction.isConfirmed()
             })
+          }
         }
         if(return_array.length > 0 ){
           await axios.post(this.callback, return_array,  {
