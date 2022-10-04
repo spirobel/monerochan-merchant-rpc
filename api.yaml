@@ -327,6 +327,10 @@ components:
           type: string
         display_amount:
           type: string
+        payment_uri:
+          type: string
+        payment_uri_qrcode:
+          type: string
     SuccessResponse:
       type: object
       properties:

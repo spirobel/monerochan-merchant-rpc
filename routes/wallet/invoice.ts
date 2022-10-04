@@ -24,7 +24,9 @@ module.exports = {
           if(display_amount.startsWith(".")){
             display_amount = "0" + display_amount
           }
-          res.status(200).json({address, address_qrcode,amount, display_amount})
+          let payment_uri =  `monero:${address}?tx_amount=${display_amount}`
+          let payment_uri_qrcode = await QRCode.toDataURL(payment_uri)
+          res.status(200).json({address, address_qrcode,amount, display_amount, payment_uri, payment_uri_qrcode})
         } else {
           res.status(200).json({address, address_qrcode})
         }
