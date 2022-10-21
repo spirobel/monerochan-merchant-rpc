@@ -351,6 +351,8 @@ components:
             type: integer
           daemon_sync_height:
             type: integer
+          error_message:
+            type: string
         required:
           - path
     GetTransactions:
