@@ -11,6 +11,11 @@ module.exports = {
         this.callback = callback
         this.wallet = wallet
        }
+      async onSyncProgress(height: number, startHeight: number,
+         endHeight: number, percentDone: number, message:string){
+          req.app.locals.walletstatus[req.body.path] = {path:req.body.path, height, startHeight,
+                                                     endHeight, percentDone, message}
+      }
 
       async onNewBlock(height:number) { //on every new block we send the updated info
         let return_array: any[] = []    // on the transactions of the last 10 blocks to the callback url
@@ -44,6 +49,7 @@ module.exports = {
           }
         }) }         
      }catch (error) {
+      req.app.locals.walletstatus[req.body.path] = {path: req.body.path, error_message: String(error)}
       console.log("error in the new block listener with callback:",this.callback, "error message: ", error)
     }
 
@@ -60,11 +66,13 @@ module.exports = {
           }
         );
         if(!req.app.locals.wallets){req.app.locals.wallets = {}}
+        if(!req.app.locals.walletstatus){req.app.locals.walletstatus = {}}
         req.app.locals.wallets[req.body.path] = wallet
         await wallet.addListener( new WalletListener(wallet, req.body.callback))
         await wallet.startSyncing(5000)
         res.status(200).json({message: 'wallet successfully opened and sync started.'})
       } catch (error){
+        req.app.locals.walletstatus[req.body.path] = {path: req.body.path, error_message: String(error)}
         res.status(500).json({ message:'unexpected error: ' + error });
       }
 

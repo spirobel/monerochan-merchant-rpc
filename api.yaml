@@ -341,16 +341,22 @@ components:
       items:
         type: string
     WalletStatusResponse:
-      type: array
-      items:
+      type: object
+      additionalProperties:
         type: object
         properties:
           path:
             type: string
-          current_sync_height:
+          height:
             type: integer
-          daemon_sync_height:
+          startHeight:
             type: integer
+          endHeight:
+            type: integer
+          percentDone:
+            type: number
+          message:
+            type: string
           error_message:
             type: string
         required:

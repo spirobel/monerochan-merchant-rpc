@@ -1,6 +1,8 @@
 const close_wallet = async (w:any, wallet_name:string, req:any) => {
   await w.stopSyncing()
+  req.app.locals.walletstatus[wallet_name] = {path: wallet_name, message: 'Stopped Synchronizing'}
   await w.close(true)
+  req.app.locals.walletstatus[wallet_name] = {path: wallet_name, message: 'wallet file successfully closed'}
   delete req.app.locals.wallets[wallet_name]
 }
 
