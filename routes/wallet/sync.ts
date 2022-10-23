@@ -57,20 +57,33 @@ module.exports = {
     } //END of Walletlistener definition 
 
       try{
-        let wallet = await monerojs.openWalletFull(
-          {
-            path: req.body.path,
-            networkType: req.body.networkType,
-            serverUri: req.body.serverUri,
-            password: "password_is_snakeoil_in_this_case",
-          }
-        );
         if(!req.app.locals.wallets){req.app.locals.wallets = {}}
         if(!req.app.locals.walletstatus){req.app.locals.walletstatus = {}}
-        req.app.locals.wallets[req.body.path] = wallet
-        await wallet.addListener( new WalletListener(wallet, req.body.callback))
-        await wallet.startSyncing(5000)
-        res.status(200).json({message: 'wallet successfully opened and sync started.'})
+        let message = ""
+        if(req.app.locals.walletstatus[req.body.path]){
+          message = req.app.locals.walletstatus[req.body.path].message;
+        }
+        if(req.app.locals.wallets[req.body.path] || message === "opening"){
+          res.status(200).json({message: 'wallet already opened.'})
+        }else {
+     
+          req.app.locals.walletstatus[req.body.path] = {path: req.body.path, message: String("opening")}
+
+          let wallet = await monerojs.openWalletFull(
+            {
+              path: req.body.path,
+              networkType: req.body.networkType,
+              serverUri: req.body.serverUri,
+              password: "password_is_snakeoil_in_this_case",
+            }
+          );
+
+          req.app.locals.wallets[req.body.path] = wallet
+          await wallet.addListener( new WalletListener(wallet, req.body.callback))
+          await wallet.startSyncing(5000)
+          req.app.locals.walletstatus[req.body.path] = {path: req.body.path, message: String("wallet successfully opened and sync started.")}
+          res.status(200).json({message: 'wallet successfully opened and sync started.'})
+        }
       } catch (error){
         req.app.locals.walletstatus[req.body.path] = {path: req.body.path, error_message: String(error)}
         res.status(500).json({ message:'unexpected error: ' + error });

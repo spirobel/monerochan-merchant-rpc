@@ -16,7 +16,14 @@ module.exports = {
         wallet_names.forEach((wallet_name: string) => {
           let w =wallets[wallet_name];
           if(!w) throw wallet_name + " was not opened, so it cant be closed"
-          close_wallet(w, wallet_name, req)
+          let message = req.app.locals.walletstatus[wallet_name].message;
+          if(message === "opening" || message === "closing" || message === 'Stopped Synchronizing'){
+            throw wallet_name + " is already closing or not opened yet"
+          } else {
+            req.app.locals.walletstatus[wallet_name] = {path: wallet_name, message: String("closing")}
+            close_wallet(w, wallet_name, req)
+          }
+
     
         });
         res.status(200).json({message: 'wallet files successfully closed'})
