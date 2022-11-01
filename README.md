@@ -8,3 +8,6 @@ Please also take a look at the [monero-playground](https://github.com/spirobel/m
 ### What the docs look like: 
 The page you can access now in your browser at [http://localhost:3001/api-docs/](http://localhost:3001/api-docs/) looks like this:
 ![image of what the docs look like](docs.png)
+
+### Troubleshooting
+You wont be able to make invoices while the wallet is not fully synced. Use the status endpoint to verify that the wallet is synced first. After that You can use the makeinvoice endpoint.
