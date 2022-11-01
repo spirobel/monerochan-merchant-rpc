@@ -175,6 +175,35 @@ paths:
                 $ref: '#/components/schemas/WalletStatusResponse'
         '500':
           description: unexpected error
+
+  /convert/amount:
+    post:
+      description: |
+        Use this endpoint to calculate conversion amount for amounts received through getTransactions or sync callbacks back to the currency of your choice.
+      summary: use this endpoint to calculate conversion rates with FIAT or other coins.
+      operationId: convertAmount
+      x-eov-operation-handler: routes/wallet/convertAmount
+      tags:
+       - accept payments & check api health
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertAmount'
+            examples:
+              Zero point 25 XMR to usd:
+                value:
+                  amount: "250000000000"
+                  currency: usd
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConvertAmountResponse'
+        '500':
+          description: unexpected error
   /wallets/getTransactions:
     post:
       description: |
@@ -361,6 +390,21 @@ components:
             type: string
         required:
           - path
+    ConvertAmount:
+      type: object
+      properties:
+        amount: 
+          type: string
+        currency: 
+          type: string
+      required:
+        - amount
+        - currency
+    ConvertAmountResponse:
+      type: object
+      properties:
+        amount: 
+          type: string
     GetTransactions:
       type: object
       properties:
