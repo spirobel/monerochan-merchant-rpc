@@ -17,7 +17,7 @@ module.exports = {
             if(payment_id != null || req.body.include_transactions_without_payment_id){
               return_array.push({
                 payment_id,
-                amount: Object.assign(new monerojs.BigInteger(), transaction.getIncomingAmount()).toString(),
+                amount: transaction.getIncomingAmount().toString(),
                 height: transaction.getHeight(),
                 confirmations: transaction.getNumConfirmations(),
                 isConfirmed: transaction.isConfirmed()
