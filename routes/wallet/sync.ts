@@ -42,7 +42,7 @@ module.exports = {
           }
         }
         if(return_array.length > 0 ){
-          await axios.post(this.callback, return_array,  {
+          await axios.post(this.callback, {transactions: return_array},  {
           headers: {
               'accept': 'application/json',
               'Content-Type': 'application/json'

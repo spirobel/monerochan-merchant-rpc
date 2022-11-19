@@ -26,7 +26,7 @@ module.exports = {
 
         }
   
-        res.status(200).json(return_array)
+        res.status(200).json({transactions: return_array})
       } catch (error){
         res.status(500).json({ message:'unexpected error: ' + error });
       }
