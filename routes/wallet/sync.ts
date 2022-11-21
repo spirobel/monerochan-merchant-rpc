@@ -33,6 +33,7 @@ module.exports = {
             let payment_id = Number("0x" + transaction.getPaymentId()) || null
             if(payment_id != null || req.body.include_transactions_without_payment_id){
             return_array.push({
+              tx_hash: transaction.getHash(),
               payment_id,
               amount: transaction.getIncomingAmount().toString(),
               height: transaction.getHeight(),
